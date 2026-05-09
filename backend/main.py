@@ -3,9 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from google_auth_oauthlib.flow import Flow
 from dotenv import load_dotenv
+from services import list_drive_files, list_email_messages, list_events
 import os
 
 load_dotenv()
+os.environ["PYTHONIOENCODING"] = "utf-8"
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
@@ -61,3 +63,28 @@ def auth_callback(state: str, code: str):
         f.write(credentials.to_json())
     del flow_store[state]
     return RedirectResponse("http://localhost:5173?auth=success")
+
+
+@app.get("/drive/files")
+def drive_files():
+    try:
+        files = list_drive_files()
+        return {"files": files}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/gmail/emails")
+def gmail_emails():
+    try:
+        emails = list_email_messages()
+        return {"emails": emails}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/calendar/events")
+def calendar_events():
+    try:
+        events = list_events()
+        return {"events": events}
+    except Exception as e:
+        return {"error": str(e)}
