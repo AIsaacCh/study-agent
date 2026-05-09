@@ -1,17 +1,19 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 from fastapi.responses import RedirectResponse
-from google_auth_oauthlib.flow import Flow 
+from google_auth_oauthlib.flow import Flow
+from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-app=FastAPI(title="Study Agent API")
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+app = FastAPI(title="Study Agent API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins="http://localhost:5174",
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -24,10 +26,11 @@ SCOPES = [
 ]
 
 
+flow_store = {}
 
 @app.get("/")
 def root():
-    return {"status": "Study Agent API is running"}
+    return {"status": "Study Agent API running"}
 
 @app.get("/health")
 def health():
@@ -35,24 +38,26 @@ def health():
 
 @app.get("/auth/login")
 def login():
-    flow=Flow.from_client_secrets_file(
+    flow = Flow.from_client_secrets_file(
         "credentials.json",
         scopes=SCOPES,
         redirect_uri="http://localhost:8000/auth/callback"
     )
-    auth_url, _=flow.authorization_url(prompt="consent")
+    auth_url, state = flow.authorization_url(
+        prompt="consent",
+        access_type="offline"
+    )
+    flow_store[state] = flow
     return RedirectResponse(auth_url)
 
 @app.get("/auth/callback")
-def auth_callback(code: str):
-    flow=Flow.from_client_secrets_file(
-        "credentials.json",
-        scopes=SCOPES,
-        redirect_uri="http://localhost:8000/auth/callback"
-    )
+def auth_callback(state: str, code: str):
+    flow = flow_store.get(state)
+    if not flow:
+        return {"error": "Sesión inválida, intenta de nuevo"}
     flow.fetch_token(code=code)
-    credentials=flow.credentials
+    credentials = flow.credentials
     with open("token.json", "w") as f:
         f.write(credentials.to_json())
-    return RedirectResponse("http://localhost:5174?auth=success")
-
+    del flow_store[state]
+    return RedirectResponse("http://localhost:5173?auth=success")
