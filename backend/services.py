@@ -1,5 +1,8 @@
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build 
+from googleapiclient.http import MediaIoBaseDownload
+from pypdf import PdfReader
+import io
 import json 
 import os 
 
@@ -73,3 +76,61 @@ def list_events(max_results=10):
         orderBy="startTime"
     ).execute()
     return results.get("items", [])
+
+
+def download_drive_file(file_id: str, mime_type: str) -> str:
+    creds = get_credentials()
+    service = build("drive", "v3", credentials=creds)
+    
+    try:
+        if "google-apps.document" in mime_type:
+            request = service.files().export_media(
+                fileId=file_id,
+                mimeType="text/plain"
+            )
+            buffer = io.BytesIO()
+            downloader = MediaIoBaseDownload(buffer, request)
+            done = False
+            while not done:
+                _, done = downloader.next_chunk()
+            buffer.seek(0)
+            return buffer.read().decode("utf-8", errors="ignore")
+
+        elif "google-apps.spreadsheet" in mime_type:
+            request = service.files().export_media(
+                fileId=file_id,
+                mimeType="text/csv"
+            )
+            buffer = io.BytesIO()
+            downloader = MediaIoBaseDownload(buffer, request)
+            done = False
+            while not done:
+                _, done = downloader.next_chunk()
+            buffer.seek(0)
+            return buffer.read().decode("utf-8", errors="ignore")
+
+        elif "google-apps" in mime_type:
+            return None
+
+        elif mime_type == "application/pdf":
+            request = service.files().get_media(fileId=file_id)
+            buffer = io.BytesIO()
+            downloader = MediaIoBaseDownload(buffer, request)
+            done = False
+            while not done:
+                _, done = downloader.next_chunk()
+            buffer.seek(0)
+            reader = PdfReader(buffer)
+            text = ""
+            for page in reader.pages:
+                text += page.extract_text() or ""
+            return text if text.strip() else None
+
+        else:
+            return None
+
+    except Exception as e:
+        error_str = str(e)
+        if "cannotDownloadFile" in error_str:
+            return None
+        return None

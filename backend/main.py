@@ -3,9 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from google_auth_oauthlib.flow import Flow
 from dotenv import load_dotenv
-from services import list_drive_files, list_email_messages, list_events
+from services import list_drive_files, list_email_messages, list_events, download_drive_file
 from gemini import chat_with_gemini, summarize_text, create_flashcards
 from pydantic import BaseModel 
+
 import os
 
 load_dotenv()
@@ -98,6 +99,10 @@ class ChatMessage(BaseModel):
 class TextInput(BaseModel):
     text: str
 
+class FileRequest(BaseModel):
+    file_id: str
+    mime_type:str
+
 @app.post("/chat")
 def chat(body: ChatMessage):
     try:
@@ -119,5 +124,30 @@ def flashcards(body: TextInput):
     try:
         result = create_flashcards(body.text)
         return {"flashcards": result}
+    except Exception as e:
+        return {"error": str(e)}
+    
+
+@app.post("/drive/summarize")
+def summarize_file(body: FileRequest):
+    try:
+        text = download_drive_file(body.file_id, body.mime_type)
+        if not text or len(text.strip()) < 50:
+            return {"error": "No se puede acceder a este archivo. Asegúrate de que te pertenece y tiene permisos de descarga."}
+        text = text[:10000]
+        summary = summarize_text(text)
+        return {"summary": summary}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.post("/drive/flashcards")
+def file_flashcards(body: FileRequest):
+    try:
+        text = download_drive_file(body.file_id, body.mime_type)
+        if not text or len(text.strip()) < 50:
+            return {"error": "No se puede acceder a este archivo. Asegúrate de que te pertenece y tiene permisos de descarga."}
+        text = text[:10000]
+        cards = create_flashcards(text)
+        return {"flashcards": cards}
     except Exception as e:
         return {"error": str(e)}
