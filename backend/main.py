@@ -4,6 +4,8 @@ from fastapi.responses import RedirectResponse
 from google_auth_oauthlib.flow import Flow
 from dotenv import load_dotenv
 from services import list_drive_files, list_email_messages, list_events
+from gemini import chat_with_gemini, summarize_text, create_flashcards
+from pydantic import BaseModel 
 import os
 
 load_dotenv()
@@ -86,5 +88,36 @@ def calendar_events():
     try:
         events = list_events()
         return {"events": events}
+    except Exception as e:
+        return {"error": str(e)}
+    
+
+class ChatMessage(BaseModel):
+    message: str
+
+class TextInput(BaseModel):
+    text: str
+
+@app.post("/chat")
+def chat(body: ChatMessage):
+    try:
+        response=chat_with_gemini(body.message)
+        return {"response": response}
+    except Exception as e:
+        return {"error": str(e)}
+    
+@app.post("/summarize")
+def summarize(body: TextInput):
+    try:
+        result = summarize_text(body.text)
+        return {"summary": result}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.post("/flashcards")
+def flashcards(body: TextInput):
+    try:
+        result = create_flashcards(body.text)
+        return {"flashcards": result}
     except Exception as e:
         return {"error": str(e)}
