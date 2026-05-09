@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getEmails } from '../services/api'
-import { Mail } from 'lucide-react'
+import { Envelope, User } from '@phosphor-icons/react'
 
 export default function Emails() {
   const [emails, setEmails] = useState([])
@@ -15,27 +15,48 @@ export default function Emails() {
 
   return (
     <div>
-      <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '8px' }}>Correos</h2>
-      <p style={{ color: '#6c7086', marginBottom: '32px' }}>Bandeja de entrada reciente</p>
+      <h2 style={{ fontSize: '26px', fontWeight: '700', marginBottom: '4px', color: 'var(--text-primary)' }}>
+        Gmail
+      </h2>
+      <p style={{ color: 'var(--text-secondary)', marginBottom: '28px', fontSize: '14px' }}>
+        Bandeja de entrada reciente
+      </p>
 
       {loading ? (
-        <p style={{ color: '#6c7086' }}>Cargando correos...</p>
+        <p style={{ color: 'var(--text-muted)' }}>Cargando correos...</p>
       ) : (
-        <div style={{ background: '#313244', borderRadius: '12px', overflow: 'hidden' }}>
+        <div className="glass-card" style={{ borderRadius: '16px', overflow: 'hidden' }}>
           {emails.map((e, i) => (
             <div key={e.id} style={{
               display: 'flex',
               alignItems: 'flex-start',
-              gap: '12px',
+              gap: '14px',
               padding: '16px 20px',
-              borderBottom: i < emails.length - 1 ? '1px solid #45475a' : 'none',
+              borderBottom: i < emails.length - 1 ? '1px solid var(--glass-dark-border)' : 'none',
+              transition: 'background 0.2s',
             }}>
-              <Mail size={18} color="#0ea5e9" style={{ marginTop: '2px' }} />
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '14px', fontWeight: 600, margin: '0 0 4px' }}>{e.subject}</p>
-                <p style={{ fontSize: '12px', color: '#6c7086', margin: 0 }}>{e.from}</p>
+              <div style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '10px',
+                background: 'linear-gradient(135deg, rgba(58,158,176,0.3), rgba(77,184,168,0.2))',
+                border: '1px solid rgba(58,158,176,0.3)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}>
+                <User size={18} weight="duotone" color="var(--accent-blue)" />
               </div>
-              <span style={{ fontSize: '12px', color: '#6c7086', whiteSpace: 'nowrap' }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-primary)', margin: '0 0 4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {e.subject}
+                </p>
+                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {e.from}
+                </p>
+              </div>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)', whiteSpace: 'nowrap', flexShrink: 0 }}>
                 {new Date(e.date).toLocaleDateString('es-MX')}
               </span>
             </div>
