@@ -25,7 +25,7 @@ const services = [
   {
     section: 'EXTERNO',
     items: [
-      { to: '/notion', icon: NotePencil, label: 'Notion', active: false },
+      { to: '/notion', icon: NotePencil, label: 'Notion', active: true },
       { to: '/spotify', icon: MusicNote, label: 'Spotify', active: false },
     ],
   },

@@ -5,6 +5,7 @@ from google_auth_oauthlib.flow import Flow
 from dotenv import load_dotenv
 from services import list_drive_files, list_email_messages, list_events, download_drive_file,list_courses,list_coursework,list_announcements
 from gemini import chat_with_gemini, summarize_text, create_flashcards
+from notion import list_pages, get_page_content, list_databases
 from pydantic import BaseModel 
 
 import os
@@ -106,6 +107,9 @@ class FileRequest(BaseModel):
     file_id: str
     mime_type:str
 
+class NotionPageRequest(BaseModel):
+    page_id:str
+
 @app.post("/chat")
 def chat(body: ChatMessage):
     try:
@@ -178,5 +182,46 @@ def get_announcements(course_id: str):
     try:
         announcements = list_announcements(course_id)
         return {"announcements": announcements}
+    except Exception as e:
+        return {"error": str(e)}
+    
+@app.get("/notion/pages")
+def notion_pages():
+    try:
+        pages = list_pages()
+        return {"pages": pages}
+    except Exception as e:
+        return {"error": str(e)}
+    
+@app.get("/notion/databases")
+def notion_databases():
+    try:
+        databases = list_databases()
+        return {"databases": databases}
+    except Exception as e:
+        return {"error": str(e)}
+    
+
+@app.post("/notion/page/content")
+def notion_page_content(body:NotionPageRequest):
+    try:
+        content=get_page_content(body.page_id)
+        if not content:
+            return {"error": "no se pudo obtener el contenido de la pagina "}
+        
+        return {"content": content}
+    
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.post("/notion/page/summarize")
+def notion_page_summarize(body: NotionPageRequest):
+    try:
+        content = get_page_content(body.page_id)
+        if not content or len(content) < 50:
+            return {"error": "La página no tiene suficiente contenido para resumir"}
+        summary = summarize_text(content[:10000])
+        return {"summary": summary}
     except Exception as e:
         return {"error": str(e)}

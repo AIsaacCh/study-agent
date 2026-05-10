@@ -9,6 +9,7 @@ import Chat from './pages/Chat'
 import Classroom from './pages/Classroom'
 import { Sun, Moon } from '@phosphor-icons/react'
 import './index.css'
+import Notion from './pages/Notion'
 
 export default function App() {
   const [theme, setTheme] = useState('light')
@@ -129,6 +130,7 @@ export default function App() {
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/chat" element={<Chat />} />
               <Route path="/classroom" element={<Classroom/>}/>
+              <Route path="/notion" element={<Notion/>}/>
             </Routes>
           </main>
         </div>
