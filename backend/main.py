@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from google_auth_oauthlib.flow import Flow
 from dotenv import load_dotenv
-from services import list_drive_files, list_email_messages, list_events, download_drive_file
+from services import list_drive_files, list_email_messages, list_events, download_drive_file,list_courses,list_coursework,list_announcements
 from gemini import chat_with_gemini, summarize_text, create_flashcards
 from pydantic import BaseModel 
 
@@ -28,6 +28,9 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive.readonly",
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/calendar.readonly",
+    "https://www.googleapis.com/auth/classroom.courses.readonly",
+    "https://www.googleapis.com/auth/classroom.announcements.readonly",
+    "https://www.googleapis.com/auth/classroom.student-submissions.me.readonly",
 ]
 
 
@@ -149,5 +152,31 @@ def file_flashcards(body: FileRequest):
         text = text[:10000]
         cards = create_flashcards(text)
         return {"flashcards": cards}
+    except Exception as e:
+        return {"error": str(e)}
+    
+
+@app.get("/classroom/courses")
+def get_courses():
+    try:
+        courses = list_courses()
+        return {"courses": courses}
+    except Exception as e:
+        return {"error": str(e)}
+    
+
+@app.get("/classroom/courses/{course_id}/work")
+def get_coursework(course_id: str):
+    try:
+        work = list_coursework(course_id)
+        return {"coursework": work}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/classroom/courses/{course_id}/announcements")
+def get_announcements(course_id: str):
+    try:
+        announcements = list_announcements(course_id)
+        return {"announcements": announcements}
     except Exception as e:
         return {"error": str(e)}

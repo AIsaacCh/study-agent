@@ -6,6 +6,7 @@ import Files from './pages/Files'
 import Emails from './pages/Emails'
 import Calendar from './pages/Calendar'
 import Chat from './pages/Chat'
+import Classroom from './pages/Classroom'
 import { Sun, Moon } from '@phosphor-icons/react'
 import './index.css'
 
@@ -127,6 +128,7 @@ export default function App() {
               <Route path="/emails" element={<Emails />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/chat" element={<Chat />} />
+              <Route path="/classroom" element={<Classroom/>}/>
             </Routes>
           </main>
         </div>

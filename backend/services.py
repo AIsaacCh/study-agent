@@ -134,3 +134,37 @@ def download_drive_file(file_id: str, mime_type: str) -> str:
         if "cannotDownloadFile" in error_str:
             return None
         return None
+    
+
+#----cladssroom----
+
+def list_courses():
+    creds = get_credentials()
+    service=build("classroom", "v1", credentials=creds)
+    results=service.courses().list(
+        pageSize=20,
+        courseStates=["ACTIVE"]
+    ).execute()
+
+    return results.get("courses", [])
+
+def list_coursework(course_id: str):
+    creds = get_credentials()
+    service = build("classroom", "v1", credentials=creds)
+    results = service.courses().courseWork().list(
+        courseId=course_id,
+        pageSize=20,
+        orderBy="dueDate desc"
+    ).execute()
+    return results.get("courseWork", [])
+
+
+def list_announcements(course_id: str):
+    creds=get_credentials()
+    service=build("classroom", "v1", credentials=creds)
+    results=service.courses().announcements().list(
+        courseId=course_id,
+        pageSize=10
+    ).execute()
+    return results.get("announcements", [])
+

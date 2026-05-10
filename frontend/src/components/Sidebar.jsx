@@ -19,7 +19,7 @@ const services = [
       { to: '/files', icon: HardDrive, label: 'Drive', active: true },
       { to: '/emails', icon: Envelope, label: 'Gmail', active: true },
       { to: '/calendar', icon: CalendarBlank, label: 'Calendar', active: true },
-      { to: '/classroom', icon: BookOpen, label: 'Classroom', active: false },
+      { to: '/classroom', icon: BookOpen, label: 'Classroom', active: true },
     ],
   },
   {
