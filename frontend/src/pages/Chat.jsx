@@ -22,7 +22,7 @@ export default function Chat() {
     setLoading(true)
     try {
       const response = await axios.post('http://localhost:8000/chat', { message: userMessage })
-      setMessages(prev => [...prev, { role: 'agent', text: response.data.response }])
+      setMessages(prev => [...prev, { role: 'agent', text: response.data.response, sources: response.data.sources || [] }])
     } catch {
       setMessages(prev => [...prev, { role: 'agent', text: 'Error al conectar con el agente.' }])
     } finally {
@@ -86,6 +86,32 @@ export default function Chat() {
                 : 'var(--glass-shadow)',
             }}>
               {m.text}
+
+
+              {m.sources && m.sources.length > 0 && (
+  <div style={{ 
+    marginTop: '8px', 
+    paddingTop: '8px',
+    borderTop: '1px solid rgba(77,184,168,0.3)',
+    display: 'flex', 
+    flexWrap: 'wrap',
+    gap: '4px'
+  }}>
+    <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Fuentes:</span>
+    {m.sources.map((s, i) => (
+      <span key={i} style={{
+        fontSize: '10px',
+        background: 'rgba(77,184,168,0.2)',
+        border: '1px solid rgba(77,184,168,0.3)',
+        borderRadius: '6px',
+        padding: '2px 8px',
+        color: 'var(--accent-teal)',
+      }}>
+        📄 {s}
+      </span>
+    ))}
+  </div>
+)}
             </div>
             {m.role === 'user' && (
               <div style={{
@@ -98,6 +124,11 @@ export default function Chat() {
               </div>
             )}
           </div>
+
+          
+
+
+
         ))}
         {loading && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
