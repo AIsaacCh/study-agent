@@ -3,9 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from google_auth_oauthlib.flow import Flow
 from dotenv import load_dotenv
-from services import list_drive_files, list_email_messages, list_events, download_drive_file,list_courses,list_coursework,list_announcements
-from gemini import chat_with_gemini, summarize_text, create_flashcards
+from services import list_drive_files, list_email_messages, list_events, download_drive_file,list_courses,list_coursework,list_announcements, download_drive_file
+from gemini import chat_with_gemini, summarize_text, create_flashcards, chat_with_context
 from notion import list_pages, get_page_content, list_databases
+from elastic import index_document, search_documents, list_indexed, delete_document
 from pydantic import BaseModel 
 
 import os
@@ -110,11 +111,37 @@ class FileRequest(BaseModel):
 class NotionPageRequest(BaseModel):
     page_id:str
 
+
+class SearchQuery(BaseModel):
+    query: str
+
+class IndexRequest(BaseModel):
+    file_id: str
+    title: str
+    mime_type: str
+
+
+
 @app.post("/chat")
 def chat(body: ChatMessage):
-    try:
-        response=chat_with_gemini(body.message)
-        return {"response": response}
+
+    try: 
+        context_docs=[]
+        try:
+            context_docs=search_documents(body.message)
+        except:
+            pass
+
+
+        if context_docs:
+            response=chat_with_context(body.message, context_docs)
+        else:
+            response=chat_with_gemini(body.message)
+
+        return {
+            "response": response,
+            "sources": [d["title"] for d in context_docs] if context_docs else []
+        }
     except Exception as e:
         return {"error": str(e)}
     
@@ -225,3 +252,53 @@ def notion_page_summarize(body: NotionPageRequest):
         return {"summary": summary}
     except Exception as e:
         return {"error": str(e)}
+    
+
+@app.post("/elastic/index")
+def index_file(body: IndexRequest):
+    try:
+
+        content=download_drive_file(body.file_id, body.mime_type)
+        if not content or len(content.strip())<50:
+            return {"error": "No se pudo extraer el conytenido del archivo"}
+        
+
+
+        index_document(
+            file_id=body.file_id,
+            title=body.title,
+            source="google_drive",
+            content=content[:50000],
+            mime_type=body.mime_type
+        )
+
+
+        return {"Success": True, "message": f"'{body.title}' indexado correctamente"}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.post("/elastic/search")
+def elastic_search(body: SearchQuery):
+    try:
+        results = search_documents(query=body.query)
+        return {"results": results}
+    except Exception as e:
+        return {"error": str(e)}
+    
+
+@app.get("/elastic/indexed")
+def elastic_indexed():
+    try:
+        docs=list_indexed()
+        return {"documents": docs}
+    except Exception as e:
+        return {"error": str(e)}
+    
+@app.delete("/elastic/document/{file_id}")
+def elastic_delete(file_id: str):
+    try:
+        succes=delete_document(file_id)
+        return {"Success": succes}
+    except Exception as e:
+        return {"error": str(e)}
+    

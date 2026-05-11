@@ -55,3 +55,25 @@ def create_flashcards(text: str) -> str:
         return response.text
     except Exception as e:
         return f"Error al crear fichas: {str(e)}"
+    
+
+def chat_with_context(message: str, context_docs: list) -> str:
+    try:
+        context = ""
+        if context_docs:
+            context = "Información relevante de los documentos:\n\n"
+            for doc in context_docs:
+                context += f"- {doc['title']}:\n{doc['content']}\n\n"
+        
+        prompt = f"""{context}
+Pregunta del estudiante: {message}
+
+Responde basándote en la información de los documentos cuando sea relevante. 
+Si no hay información suficiente en los documentos, responde con tu conocimiento general."""
+        
+        response = chat_session.send_message(prompt)
+        return response.text
+    except Exception as e:
+        return f"Error: {str(e)}"
+    
+
