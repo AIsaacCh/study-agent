@@ -9,9 +9,12 @@ import {
   File,
   BookOpen,
   Cards,
-  ArrowLeft
+  ArrowLeft,
+  MagnifyingGlass
 } from '@phosphor-icons/react'
 import axios from 'axios'
+
+
 
 function getFileIcon(mimeType) {
   const iconProps = { size: 24, weight: 'duotone' }
@@ -49,6 +52,7 @@ export default function Files() {
   const [resultType, setResultType] = useState('')
   const [processing, setProcessing] = useState(null)
   const [selectedFile, setSelectedFile] = useState(null)
+  const [indexed, setIndexed] = useState({}) 
 
   useEffect(() => {
     getFiles().then(r => {
@@ -94,6 +98,22 @@ export default function Files() {
       setProcessing(null)
     }
   }
+  const handleIndex = async (file) => {
+  setProcessing(file.id)
+  try {
+    const r = await axios.post('http://localhost:8000/elastic/index', {
+      file_id: file.id,
+      title: file.name,
+      mime_type: file.mimeType
+    })
+    if (r.data.success) {
+      setIndexed(prev => ({ ...prev, [file.id]: true }))
+    }
+  } catch {
+  } finally {
+    setProcessing(null)
+  }
+}
 
   return (
     <div>
@@ -226,54 +246,27 @@ export default function Files() {
                     {new Date(f.modifiedTime).toLocaleDateString('es-MX')}
                   </p>
 
-                  {processable && (
-                    <div style={{ display: 'flex', gap: '6px' }}>
-                      <button
-                        onClick={() => handleSummarize(f)}
-                        disabled={isProcessing}
-                        style={{
-                          flex: 1,
-                          background: 'linear-gradient(135deg, rgba(77,184,168,0.3), rgba(58,158,176,0.2))',
-                          border: '1px solid rgba(77,184,168,0.4)',
-                          borderRadius: '8px',
-                          padding: '5px',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '4px',
-                          color: 'var(--accent-teal)',
-                          fontSize: '10px',
-                          fontWeight: '600',
-                        }}
-                      >
-                        <BookOpen size={11} weight="duotone" />
-                        Resumir
-                      </button>
-                      <button
-                        onClick={() => handleFlashcards(f)}
-                        disabled={isProcessing}
-                        style={{
-                          flex: 1,
-                          background: 'linear-gradient(135deg, rgba(58,158,176,0.3), rgba(91,200,160,0.2))',
-                          border: '1px solid rgba(58,158,176,0.4)',
-                          borderRadius: '8px',
-                          padding: '5px',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '4px',
-                          color: 'var(--accent-blue)',
-                          fontSize: '10px',
-                          fontWeight: '600',
-                        }}
-                      >
-                        <Cards size={11} weight="duotone" />
-                        Fichas
-                      </button>
-                    </div>
-                  )}
+                 {processable && (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+    <div style={{ display: 'flex', gap: '5px' }}>
+      <button onClick={() => handleSummarize(f)} disabled={isProcessing}
+        style={{ flex: 1, background: 'linear-gradient(135deg, rgba(77,184,168,0.3), rgba(58,158,176,0.2))', border: '1px solid rgba(77,184,168,0.4)', borderRadius: '8px', padding: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'var(--accent-teal)', fontSize: '10px', fontWeight: '600' }}>
+        <BookOpen size={11} weight="duotone" />
+        Resumir
+      </button>
+      <button onClick={() => handleFlashcards(f)} disabled={isProcessing}
+        style={{ flex: 1, background: 'linear-gradient(135deg, rgba(58,158,176,0.3), rgba(91,200,160,0.2))', border: '1px solid rgba(58,158,176,0.4)', borderRadius: '8px', padding: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'var(--accent-blue)', fontSize: '10px', fontWeight: '600' }}>
+        <Cards size={11} weight="duotone" />
+        Fichas
+      </button>
+    </div>
+    <button onClick={() => handleIndex(f)} disabled={isProcessing || indexed[f.id]}
+      style={{ width: '100%', background: indexed[f.id] ? 'rgba(91,200,160,0.3)' : 'linear-gradient(135deg, rgba(122,168,208,0.3), rgba(91,200,160,0.2))', border: `1px solid ${indexed[f.id] ? 'rgba(91,200,160,0.5)' : 'rgba(122,168,208,0.4)'}`, borderRadius: '8px', padding: '5px', cursor: indexed[f.id] ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: indexed[f.id] ? 'var(--accent-green)' : '#7aa8d0', fontSize: '10px', fontWeight: '600' }}>
+      <MagnifyingGlass size={11} weight="duotone" />
+      {indexed[f.id] ? '✓ Indexado en Elastic' : 'Indexar en Elastic'}
+    </button>
+  </div>
+)}
                 </div>
               </div>
             )
@@ -287,6 +280,7 @@ export default function Files() {
           50% { opacity: 1; transform: scale(1); }
         }
       `}</style>
+      
     </div>
   )
 }
