@@ -1,197 +1,167 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
-  SquaresFour,
-  HardDrive,
-  Envelope,
-  CalendarBlank,
-  Chat,
-  BookOpen,
-  MusicNote,
-  NotePencil,
-  Circle,
+  SquaresFour, HardDrive, Envelope, CalendarBlank,
+  Chat, BookOpen, NotePencil, MagnifyingGlass,
+  List, Circle,
 } from '@phosphor-icons/react'
 
 const services = [
-  {
-    section: 'GOOGLE',
-    items: [
-      { to: '/', icon: SquaresFour, label: 'Dashboard', active: true },
-      { to: '/files', icon: HardDrive, label: 'Drive', active: true },
-      { to: '/emails', icon: Envelope, label: 'Gmail', active: true },
-      { to: '/calendar', icon: CalendarBlank, label: 'Calendar', active: true },
-      { to: '/classroom', icon: BookOpen, label: 'Classroom', active: true },
-    ],
-  },
-  {
-    section: 'EXTERNO',
-    items: [
-      { to: '/notion', icon: NotePencil, label: 'Notion', active: true },
-      { to: '/spotify', icon: MusicNote, label: 'Spotify', active: false },
-    ],
-  },
-  {
-    section: 'AGENTE',
-    items: [
-      { to: '/chat', icon: Chat, label: 'Chat IA', active: true },
-    ],
-  },
+  { section: 'PRINCIPAL', items: [
+    { to: '/', icon: SquaresFour, label: 'Dashboard' },
+    { to: '/files', icon: HardDrive, label: 'Drive' },
+    { to: '/emails', icon: Envelope, label: 'Gmail' },
+    { to: '/calendar', icon: CalendarBlank, label: 'Calendar' },
+    { to: '/classroom', icon: BookOpen, label: 'Classroom' },
+    { to: '/notion', icon: NotePencil, label: 'Notion' },
+  ]},
+  { section: 'AGENTE', items: [
+    { to: '/chat', icon: Chat, label: 'Chat IA' },
+  ]},
 ]
 
 const statusItems = [
   { label: 'Gemini 2.5', status: 'ok' },
   { label: 'Drive API', status: 'ok' },
-  { label: 'Gmail API', status: 'ok' },
-  { label: 'Calendar', status: 'warn' },
+  { label: 'Elastic', status: 'ok' },
+  { label: 'Notion', status: 'ok' },
 ]
 
-function GlassIcon({ icon: Icon, isActive }) {
-  return (
-    <div style={{
-      width: '28px',
-      height: '28px',
-      borderRadius: '8px',
-      background: isActive
-        ? 'linear-gradient(135deg, rgba(77,184,168,0.5), rgba(58,158,176,0.5))'
-        : 'rgba(255,255,255,0.2)',
-      border: isActive
-        ? '1px solid rgba(77,184,168,0.6)'
-        : '1px solid rgba(255,255,255,0.3)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexShrink: 0,
-      backdropFilter: 'blur(4px)',
-      boxShadow: isActive
-        ? '0 2px 8px rgba(77,184,168,0.3), inset 0 1px 0 rgba(255,255,255,0.5)'
-        : 'inset 0 1px 0 rgba(255,255,255,0.3)',
-      transition: 'all 0.2s',
-    }}>
-      <Icon
-        size={15}
-        weight="duotone"
-        color={isActive ? '#1a6a6a' : 'var(--text-muted)'}
-      />
-    </div>
-  )
-}
-
 export default function Sidebar() {
+  const [open, setOpen] = useState(false)
+
   return (
-    <aside className="glass" style={{
-      width: '200px',
+    <aside style={{
+      width: open ? '180px' : '56px',
       minHeight: '100%',
-      padding: '16px 12px',
+      background: 'var(--sidebar-bg)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      borderRight: '1px solid var(--glass-border)',
+      padding: open ? '12px' : '12px 0',
       display: 'flex',
       flexDirection: 'column',
-      gap: '20px',
+      gap: '4px',
       flexShrink: 0,
-      borderRadius: 0,
-      borderLeft: 'none',
-      borderTop: 'none',
-      borderBottom: 'none',
+      transition: 'width 0.3s ease',
+      overflow: 'hidden',
+      alignItems: open ? 'flex-start' : 'center',
     }}>
+      {/* Toggle */}
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width: '32px', height: '32px',
+          borderRadius: '9px',
+          background: 'rgba(255,255,255,0.55)',
+          border: '1px solid rgba(255,255,255,0.7)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer',
+          flexShrink: 0,
+          marginBottom: '10px',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.8)',
+        }}
+      >
+        <List size={16} color="var(--text-secondary)" />
+      </button>
+
+      {/* Logo */}
+      <div style={{
+        width: '32px', height: '32px', borderRadius: '9px',
+        background: 'linear-gradient(135deg, #c8a060, #9a7040)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0,
+        marginBottom: '14px',
+        boxShadow: '0 2px 8px rgba(160,110,50,0.3), inset 0 1px 0 rgba(255,220,160,0.4)',
+      }}>
+        <span style={{ fontSize: '16px' }}>📚</span>
+      </div>
+
       {services.map(({ section, items }) => (
-        <div key={section}>
-          <p style={{
-            fontSize: '9px',
-            color: 'var(--text-muted)',
-            letterSpacing: '1.5px',
-            marginBottom: '6px',
-            paddingLeft: '4px',
-            fontWeight: '600',
-          }}>
-            {section}
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-            {items.map(({ to, icon, label, active }) =>
-              active ? (
-                <NavLink
-                  key={to}
-                  to={to}
-                  end={to === '/'}
-                  style={({ isActive }) => ({
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '7px 10px',
-                    borderRadius: '10px',
-                    textDecoration: 'none',
-                    background: isActive ? 'var(--nav-active-bg)' : 'transparent',
-                    border: isActive ? '1px solid var(--nav-active-border)' : '1px solid transparent',
-                    color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                    fontSize: '13px',
-                    fontWeight: isActive ? '600' : '400',
-                    transition: 'all 0.2s',
-                    boxShadow: isActive ? '0 2px 8px rgba(100,180,200,0.15)' : 'none',
-                  })}
-                >
-                  {({ isActive }) => (
-                    <>
-                      <GlassIcon icon={icon} isActive={isActive} />
-                      {label}
-                      {isActive && (
-                        <div style={{
-                          marginLeft: 'auto',
-                          width: '6px',
-                          height: '6px',
-                          borderRadius: '50%',
-                          background: 'var(--accent-teal)',
-                          boxShadow: '0 0 6px var(--accent-teal)',
-                        }}/>
-                      )}
-                    </>
-                  )}
-                </NavLink>
-              ) : (
-                <div
-                  key={to}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '7px 10px',
-                    borderRadius: '10px',
-                    color: 'var(--text-muted)',
-                    fontSize: '13px',
-                    opacity: 0.5,
-                    cursor: 'not-allowed',
-                  }}
-                >
-                  <GlassIcon icon={icon} isActive={false} />
-                  {label}
-                  <span style={{
-                    marginLeft: 'auto',
-                    fontSize: '8px',
-                    color: 'var(--text-muted)',
-                    border: '1px solid var(--glass-dark-border)',
-                    padding: '1px 5px',
-                    borderRadius: '4px',
-                    background: 'var(--glass-dark-bg)',
-                  }}>
-                    soon
-                  </span>
-                </div>
-              )
-            )}
+        <div key={section} style={{ width: '100%' }}>
+          {open && (
+            <p style={{
+              fontSize: '9px', color: 'var(--text-muted)',
+              letterSpacing: '1.5px', marginBottom: '4px',
+              paddingLeft: '8px', fontWeight: '600',
+            }}>
+              {section}
+            </p>
+          )}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            {items.map(({ to, icon: Icon, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={to === '/'}
+                style={({ isActive }) => ({
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: open ? '8px 10px' : '8px',
+                  borderRadius: '10px',
+                  textDecoration: 'none',
+                  background: isActive ? 'var(--nav-active-bg)' : 'transparent',
+                  border: isActive ? '1px solid var(--nav-active-border)' : '1px solid transparent',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  fontSize: '12px',
+                  fontWeight: isActive ? '600' : '400',
+                  transition: 'all 0.2s',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  justifyContent: open ? 'flex-start' : 'center',
+                })}
+              >
+                {({ isActive }) => (
+                  <>
+                    <div style={{
+                      width: '26px', height: '26px', borderRadius: '7px', flexShrink: 0,
+                      background: isActive
+                        ? 'linear-gradient(135deg, rgba(200,160,80,0.4), rgba(160,120,50,0.3))'
+                        : 'rgba(255,255,255,0.3)',
+                      border: isActive
+                        ? '1px solid rgba(200,160,80,0.5)'
+                        : '1px solid rgba(255,255,255,0.5)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6)',
+                    }}>
+                      <Icon size={14} weight="duotone"
+                        color={isActive ? '#9a7040' : 'var(--text-muted)'} />
+                    </div>
+                    {open && label}
+                  </>
+                )}
+              </NavLink>
+            ))}
           </div>
         </div>
       ))}
 
       {/* Status */}
-      <div style={{ marginTop: 'auto', paddingTop: '12px', borderTop: '1px solid var(--glass-dark-border)' }}>
-        <p style={{ fontSize: '9px', color: 'var(--text-muted)', letterSpacing: '1.5px', marginBottom: '8px', fontWeight: '600' }}>
-          STATUS
-        </p>
+      <div style={{
+        marginTop: 'auto', width: '100%',
+        paddingTop: '12px',
+        borderTop: '1px solid var(--glass-dark-border)',
+      }}>
+        {open && (
+          <p style={{
+            fontSize: '9px', color: 'var(--text-muted)',
+            letterSpacing: '1.5px', marginBottom: '6px',
+            fontWeight: '600',
+          }}>STATUS</p>
+        )}
         {statusItems.map(({ label, status }) => (
-          <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+          <div key={label} style={{
+            display: 'flex', alignItems: 'center',
+            gap: '6px', marginBottom: '4px',
+            justifyContent: open ? 'flex-start' : 'center',
+          }}>
             <div style={{
-              width: '6px', height: '6px', borderRadius: '50%',
-              background: status === 'ok' ? 'var(--accent-green)' : 'var(--accent-warn)',
-              boxShadow: status === 'ok'
-                ? '0 0 6px var(--accent-green)'
-                : '0 0 6px var(--accent-warn)',
+              width: '5px', height: '5px', borderRadius: '50%', flexShrink: 0,
+              background: status === 'ok' ? '#8fbb70' : 'var(--accent-warn)',
+              boxShadow: status === 'ok' ? '0 0 5px #8fbb70' : '0 0 5px var(--accent-warn)',
             }}/>
-            <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{label}</span>
+            {open && <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{label}</span>}
           </div>
         ))}
       </div>

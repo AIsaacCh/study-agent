@@ -7,9 +7,9 @@ import Emails from './pages/Emails'
 import Calendar from './pages/Calendar'
 import Chat from './pages/Chat'
 import Classroom from './pages/Classroom'
+import Notion from './pages/Notion'
 import { Sun, Moon } from '@phosphor-icons/react'
 import './index.css'
-import Notion from './pages/Notion'
 
 export default function App() {
   const [theme, setTheme] = useState('light')
@@ -17,8 +17,6 @@ export default function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
-
-  const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light')
 
   return (
     <BrowserRouter>
@@ -30,20 +28,25 @@ export default function App() {
         color: 'var(--text-primary)',
         overflow: 'hidden',
       }}>
-
         {/* Orb extra */}
         <div style={{
           position: 'absolute',
-          width: '200px',
-          height: '200px',
+          width: '200px', height: '200px',
           borderRadius: '50%',
           background: 'var(--bg-orb3)',
-          filter: 'blur(60px)',
-          opacity: 0.3,
-          top: '40%',
-          right: '-40px',
-          pointerEvents: 'none',
-          zIndex: 0,
+          filter: 'blur(70px)',
+          opacity: 0.25,
+          top: '40%', right: '-30px',
+          pointerEvents: 'none', zIndex: 0,
+        }}/>
+
+        {/* Desk line */}
+        <div style={{
+          position: 'absolute',
+          bottom: 0, left: 0, right: 0,
+          height: '30%',
+          background: 'var(--desk-gradient)',
+          pointerEvents: 'none', zIndex: 0,
         }}/>
 
         {/* Header */}
@@ -62,14 +65,10 @@ export default function App() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, var(--accent-teal), var(--accent-blue))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(77,184,168,0.4)',
+              width: '34px', height: '34px', borderRadius: '10px',
+              background: 'linear-gradient(135deg, #c8a060, #9a7040)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(160,110,50,0.35), inset 0 1px 0 rgba(255,220,160,0.4)',
             }}>
               <span style={{ fontSize: '18px' }}>📚</span>
             </div>
@@ -78,37 +77,30 @@ export default function App() {
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <div style={{
-                width: '7px', height: '7px',
-                borderRadius: '50%',
-                background: 'var(--accent-green)',
-                boxShadow: '0 0 6px var(--accent-green)',
+                width: '7px', height: '7px', borderRadius: '50%',
+                background: '#8fbb70',
+                boxShadow: '0 0 6px #8fbb70',
               }}/>
-              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-                Gemini 2.5 Flash
-              </span>
+              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Gemini 2.5 Flash</span>
             </div>
 
             <button
-              onClick={toggleTheme}
+              onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')}
               className="glass-card"
               style={{
-                borderRadius: '10px',
-                padding: '7px 14px',
+                borderRadius: '10px', padding: '7px 14px',
                 cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                color: 'var(--text-secondary)',
-                fontSize: '12px',
-                transition: 'all 0.2s',
+                display: 'flex', alignItems: 'center', gap: '6px',
+                color: 'var(--text-secondary)', fontSize: '12px',
+                border: '1px solid var(--glass-dark-border)',
               }}
             >
               {theme === 'light'
                 ? <Moon size={14} weight="duotone" color="var(--accent-blue)"/>
-                : <Sun size={14} weight="duotone" color="var(--accent-teal)"/>
+                : <Sun size={14} weight="duotone" color="var(--accent-yellow)"/>
               }
               {theme === 'light' ? 'Oscuro' : 'Claro'}
             </button>
@@ -119,9 +111,7 @@ export default function App() {
         <div style={{ display: 'flex', flex: 1, overflow: 'hidden', position: 'relative', zIndex: 1 }}>
           <Sidebar />
           <main style={{
-            flex: 1,
-            padding: '24px',
-            overflowY: 'auto',
+            flex: 1, padding: '24px', overflowY: 'auto',
           }}>
             <Routes>
               <Route path="/" element={<Dashboard />} />
@@ -129,8 +119,8 @@ export default function App() {
               <Route path="/emails" element={<Emails />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/chat" element={<Chat />} />
-              <Route path="/classroom" element={<Classroom/>}/>
-              <Route path="/notion" element={<Notion/>}/>
+              <Route path="/classroom" element={<Classroom />} />
+              <Route path="/notion" element={<Notion />} />
             </Routes>
           </main>
         </div>
