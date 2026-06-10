@@ -6,12 +6,12 @@ export default function Emails() {
   const [emails, setEmails] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    getEmails().then(r => {
-      setEmails(r.data.emails || [])
-      setLoading(false)
-    })
-  }, [])
+useEffect(() => {
+  getEmails().then(r => {
+    setEmails(r.data.emails || [])
+    setLoading(false)
+  })
+}, [])
 
   return (
     <div>

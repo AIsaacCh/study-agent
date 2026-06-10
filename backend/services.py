@@ -35,32 +35,30 @@ def list_drive_files():
 
 #-----gmail-----
 def list_email_messages(max_results=10):
-    creds=get_credentials()
-    service=build("gmail","v1",credentials=creds)
-    results=service.users().messages().list(
+    creds = get_credentials()
+    service = build("gmail", "v1", credentials=creds)
+    results = service.users().messages().list(
         userId="me",
         maxResults=max_results,
         labelIds=["INBOX"]
     ).execute()
-
-    messages=results.get("messages", [])
-    emails=[]
+    messages = results.get("messages", [])
+    emails = []
     for msg in messages:
-        detail=service.users().messages().get(
+        detail = service.users().messages().get(
             userId="me",
             id=msg["id"],
             format="metadata",
             metadataHeaders=["Subject", "From", "Date"]
         ).execute()
-        headers={h["name"]: h["value"] for h in detail["payload"]["headers"]}
+        headers = {h["name"]: h["value"] for h in detail["payload"]["headers"]}
         emails.append({
             "id": msg["id"],
-            "subject":headers.get("Subject", "Sin asunto"),
+            "subject": headers.get("Subject", "Sin asunto"),
             "from": headers.get("From", ""),
             "date": headers.get("Date", "")
         })
-
-        return emails
+    return emails
     
 #-----calendars-----
 def list_events(max_results=10):
@@ -168,3 +166,44 @@ def list_announcements(course_id: str):
     ).execute()
     return results.get("announcements", [])
 
+
+def create_calendar_event(title: str, date: str, description: str = "", duration_hours: int = 1):
+    from datetime import datetime, timedelta, timezone
+    creds = get_credentials()
+    service = build("calendar", "v3", credentials=creds)
+
+    try:
+        # Intenta parsear con hora incluida
+        if "T" in date:
+            dt = datetime.fromisoformat(date)
+        elif "/" in date:
+            parts = date.split("/")
+            if len(parts[2]) == 4:
+                dt = datetime.strptime(date, "%d/%m/%Y")
+            else:
+                dt = datetime.strptime(date, "%m/%d/%Y")
+        else:
+            dt = datetime.strptime(date, "%Y-%m-%d")
+    except:
+        dt = datetime.now(timezone.utc)
+
+    event = {
+        "summary": title,
+        "description": description,
+        "start": {
+            "dateTime": dt.strftime("%Y-%m-%dT%H:%M:%S"),
+            "timeZone": "America/Mexico_City",
+        },
+        "end": {
+            "dateTime": (dt + timedelta(hours=duration_hours)).strftime("%Y-%m-%dT%H:%M:%S"),
+            "timeZone": "America/Mexico_City",
+        },
+    }
+
+    created = service.events().insert(calendarId="primary", body=event).execute()
+    return {
+        "success": True,
+        "title": created.get("summary"),
+        "date": date,
+        "link": created.get("htmlLink"),
+    }

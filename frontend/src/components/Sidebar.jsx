@@ -5,6 +5,7 @@ import {
   Chat, BookOpen, NotePencil, MagnifyingGlass,
   List, Circle,
 } from '@phosphor-icons/react'
+import { YoutubeLogo } from '@phosphor-icons/react'
 
 const services = [
   { section: 'PRINCIPAL', items: [
@@ -14,6 +15,7 @@ const services = [
     { to: '/calendar', icon: CalendarBlank, label: 'Calendar' },
     { to: '/classroom', icon: BookOpen, label: 'Classroom' },
     { to: '/notion', icon: NotePencil, label: 'Notion' },
+    { to: '/youtube', icon: YoutubeLogo, label: 'YouTube' },
   ]},
   { section: 'AGENTE', items: [
     { to: '/chat', icon: Chat, label: 'Chat IA' },
@@ -168,3 +170,4 @@ export default function Sidebar() {
     </aside>
   )
 }
+

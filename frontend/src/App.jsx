@@ -10,6 +10,7 @@ import Classroom from './pages/Classroom'
 import Notion from './pages/Notion'
 import { Sun, Moon } from '@phosphor-icons/react'
 import './index.css'
+import YouTube from './pages/Youtube'
 
 export default function App() {
   const [theme, setTheme] = useState('light')
@@ -121,6 +122,7 @@ export default function App() {
               <Route path="/chat" element={<Chat />} />
               <Route path="/classroom" element={<Classroom />} />
               <Route path="/notion" element={<Notion />} />
+              <Route path="/youtube" element={<YouTube />} />
             </Routes>
           </main>
         </div>
