@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { GraduationCap, BookOpen, ArrowLeft, Bell } from '@phosphor-icons/react'
 import axios from 'axios'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export default function Classroom() {
   const [courses, setCourses] = useState([])
@@ -11,7 +12,7 @@ export default function Classroom() {
   const [loadingDetail, setLoadingDetail] = useState(false)
 
   useEffect(() => {
-    axios.get('http://localhost:8000/classroom/courses').then(r => {
+    axios.get(`${API_URL}/classroom/courses`).then(r => {
       setCourses(r.data.courses || [])
       setLoading(false)
     })
@@ -22,8 +23,8 @@ export default function Classroom() {
     setLoadingDetail(true)
     try {
       const [w, a] = await Promise.all([
-        axios.get(`http://localhost:8000/classroom/courses/${course.id}/work`),
-        axios.get(`http://localhost:8000/classroom/courses/${course.id}/announcements`),
+        axios.get(`${API_URL}/classroom/courses/${course.id}/work`),
+        axios.get(`${API_URL}/classroom/courses/${course.id}/announcements`),
       ])
       setWork(w.data.coursework || [])
       setAnnouncements(a.data.announcements || [])

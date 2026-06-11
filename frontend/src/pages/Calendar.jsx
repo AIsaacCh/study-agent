@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { getEvents } from '../services/api'
 import { CalendarBlank, Clock, Plus, X } from '@phosphor-icons/react'
 import axios from 'axios'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export default function CalendarPage() {
   const [events, setEvents] = useState([])
@@ -24,7 +25,7 @@ export default function CalendarPage() {
     if (!newEvent.title || !newEvent.date) return
     setCreating(true)
     try {
-      await axios.post('http://localhost:8000/calendar/create', newEvent)
+      await axios.post(`${API_URL}/calendar/create`, newEvent)
       setShowForm(false)
       setNewEvent({ title: '', date: '', description: '' })
       loadEvents()

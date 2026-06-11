@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MagnifyingGlass, YoutubeLogo, Play, X } from '@phosphor-icons/react'
 import axios from 'axios'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export default function YouTube() {
   const [query, setQuery] = useState('')
@@ -14,7 +15,7 @@ export default function YouTube() {
     setLoading(true)
     setVideos([])
     try {
-      const r = await axios.post('http://localhost:8000/youtube/search', {
+      const r = await axios.post(`${API_URL}/youtube/search`, {
         query, subject
       })
       setVideos(r.data.videos || [])

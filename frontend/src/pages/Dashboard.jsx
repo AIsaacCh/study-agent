@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { getFiles, getEmails, getEvents } from '../services/api'
 import { HardDrive, Envelope, CalendarBlank, Chat, BookOpen, FilePdf, FileDoc, ArrowRight } from '@phosphor-icons/react'
 import axios from 'axios'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 import { useNavigate } from 'react-router-dom'
 
 function StatCard({ icon: Icon, label, value, color }) {
@@ -109,8 +110,8 @@ export default function Dashboard() {
     getFiles().then(r => setData(d => ({ ...d, files: r.data.files || [] })))
     getEmails().then(r => setData(d => ({ ...d, emails: r.data.emails || [] })))
     getEvents().then(r => setData(d => ({ ...d, events: r.data.events || [] })))
-    axios.get('http://localhost:8000/classroom/courses').then(r => setData(d => ({ ...d, courses: r.data.courses || [] })))
-    axios.get('http://localhost:8000/elastic/indexed').then(r => setData(d => ({ ...d, indexed: r.data.documents || [] })))
+    axios.get(`${API_URL}/classroom/courses`).then(r => setData(d => ({ ...d, courses: r.data.courses || [] })))
+    axios.get(`${API_URL}/elastic/indexed`).then(r => setData(d => ({ ...d, indexed: r.data.documents || [] })))
     const timer = setInterval(() => setTime(new Date()), 60000)
     return () => clearInterval(timer)
   }, [])

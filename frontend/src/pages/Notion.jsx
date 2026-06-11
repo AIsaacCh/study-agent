@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { NotePencil, ArrowLeft, BookOpen, Cards } from '@phosphor-icons/react'
 import axios from 'axios'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export default function Notion() {
   const [pages, setPages] = useState([])
@@ -11,7 +12,7 @@ export default function Notion() {
   const [processing, setProcessing] = useState(null)
 
   useEffect(() => {
-    axios.get('http://localhost:8000/notion/pages').then(r => {
+    axios.get(`${API_URL}/notion/pages`).then(r => {
       setPages(r.data.pages || [])
       setLoading(false)
     })
@@ -21,7 +22,7 @@ export default function Notion() {
     setProcessing(page.id)
     setResult(null)
     try {
-      const r = await axios.post('http://localhost:8000/notion/page/summarize', {
+      const r = await axios.post(`${API_URL}/notion/page/summarize`, {
         page_id: page.id
       })
       setSelected(page)
@@ -38,7 +39,7 @@ export default function Notion() {
     setProcessing(page.id)
     setResult(null)
     try {
-      const content = await axios.post('http://localhost:8000/notion/page/content', {
+      const content = await axios.post(`${API_URL}/notion/page/content`, {
         page_id: page.id
       })
       const text = content.data.content
@@ -47,7 +48,7 @@ export default function Notion() {
         setProcessing(null)
         return
       }
-      const r = await axios.post('http://localhost:8000/flashcards', { text })
+      const r = await axios.post(`${API_URL}/flashcards`, { text })
       setSelected(page)
       setResultType('Fichas')
       setResult(r.data.flashcards || r.data.error)

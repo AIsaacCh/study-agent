@@ -1,0 +1,113 @@
+[debug] [2026-06-11T03:38:55.277Z] ----------------------------------------------------------------------
+[debug] [2026-06-11T03:38:55.282Z] Command:       /usr/local/bin/node /usr/local/bin/firebase init hosting
+[debug] [2026-06-11T03:38:55.282Z] CLI Version:   15.20.0
+[debug] [2026-06-11T03:38:55.282Z] Platform:      darwin
+[debug] [2026-06-11T03:38:55.282Z] Node Version:  v22.21.0
+[debug] [2026-06-11T03:38:55.282Z] Time:          Wed Jun 10 2026 21:38:55 GMT-0600 (hora estándar central)
+[debug] [2026-06-11T03:38:55.282Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/isaacch/Desktop/study-agent
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-06-11T03:39:40.489Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-11T03:39:40.489Z] > authorizing via signed-in user (corteshernandezangelisaac@gmail.com)
+[debug] [2026-06-11T03:39:40.491Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:39:40.492Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:39:40.493Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/availableProjects pageSize=100
+[debug] [2026-06-11T03:39:40.966Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/availableProjects 200
+[debug] [2026-06-11T03:39:40.966Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/availableProjects [omitted]
+[debug] [2026-06-11T03:39:47.450Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:39:47.450Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:39:47.450Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1beta1/projects/study-agent-495701:addFirebase [none]
+[debug] [2026-06-11T03:39:47.714Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1beta1/projects/study-agent-495701:addFirebase 403
+[debug] [2026-06-11T03:39:47.714Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1beta1/projects/study-agent-495701:addFirebase {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2026-06-11T03:39:47.715Z] Request to https://firebase.googleapis.com/v1beta1/projects/study-agent-495701:addFirebase had HTTP Error: 403, The caller does not have permission
+[debug] [2026-06-11T03:39:47.822Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/study-agent-495701:addFirebase had HTTP Error: 403, The caller does not have permission
+    at responseToError (/usr/local/lib/node_modules/firebase-tools/lib/responseToError.js:53:12)
+    at RetryOperation._fn (/usr/local/lib/node_modules/firebase-tools/lib/apiv2.js:333:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] 
+[error] Error: Failed to add Firebase to Google Cloud Platform project. See firebase-debug.log for more info.
+[debug] [2026-06-11T03:40:23.962Z] ----------------------------------------------------------------------
+[debug] [2026-06-11T03:40:23.967Z] Command:       /usr/local/bin/node /usr/local/bin/firebase init hosting
+[debug] [2026-06-11T03:40:23.968Z] CLI Version:   15.20.0
+[debug] [2026-06-11T03:40:23.968Z] Platform:      darwin
+[debug] [2026-06-11T03:40:23.968Z] Node Version:  v22.21.0
+[debug] [2026-06-11T03:40:23.968Z] Time:          Wed Jun 10 2026 21:40:23 GMT-0600 (hora estándar central)
+[debug] [2026-06-11T03:40:23.968Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/isaacch/Desktop/study-agent
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2026-06-11T03:40:31.491Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-11T03:40:31.491Z] > authorizing via signed-in user (corteshernandezangelisaac@gmail.com)
+[debug] [2026-06-11T03:40:42.357Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:40:42.357Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:40:42.359Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1/projects:checkProjectId [none]
+[debug] [2026-06-11T03:40:42.359Z] >>> [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"proposedId":"study-agent-isaac"}
+[debug] [2026-06-11T03:40:42.613Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1/projects:checkProjectId 200
+[debug] [2026-06-11T03:40:42.613Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1/projects:checkProjectId {"projectIdStatus":"PROJECT_ID_AVAILABLE","suggestedProjectId":"study-agent-isaac"}
+[debug] [2026-06-11T03:41:00.961Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:41:00.962Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:41:00.962Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects [none]
+[debug] [2026-06-11T03:41:00.962Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"projectId":"study-agent-isaac","name":"study-agent-isaac"}
+[debug] [2026-06-11T03:41:01.384Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects 200
+[debug] [2026-06-11T03:41:01.385Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"name":"operations/create_project.global.9106652710376199294"}
+[debug] [2026-06-11T03:41:01.386Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:41:01.386Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:41:01.386Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.9106652710376199294 [none]
+[debug] [2026-06-11T03:41:01.652Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.9106652710376199294 200
+[debug] [2026-06-11T03:41:01.652Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.9106652710376199294 {"name":"operations/create_project.global.9106652710376199294"}
+[debug] [2026-06-11T03:41:02.154Z] [Project Creation Poller] Retrying task index 0
+[debug] [2026-06-11T03:41:02.155Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:41:02.155Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:41:02.156Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.9106652710376199294 [none]
+[debug] [2026-06-11T03:41:02.253Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.9106652710376199294 200
+[debug] [2026-06-11T03:41:02.253Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.9106652710376199294 {"name":"operations/create_project.global.9106652710376199294"}
+[debug] [2026-06-11T03:41:03.254Z] [Project Creation Poller] Retrying task index 0
+[debug] [2026-06-11T03:41:03.255Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:41:03.255Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:41:03.255Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.9106652710376199294 [none]
+[debug] [2026-06-11T03:41:03.343Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.9106652710376199294 200
+[debug] [2026-06-11T03:41:03.343Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.9106652710376199294 {"name":"operations/create_project.global.9106652710376199294","metadata":{"@type":"type.googleapis.com/google.cloudresourcemanager.v1.ProjectCreationStatus","gettable":true,"ready":true},"done":true,"response":{"@type":"type.googleapis.com/google.cloudresourcemanager.v1.Project","projectNumber":"15204465451","projectId":"study-agent-isaac","lifecycleState":"ACTIVE","name":"study-agent-isaac","createTime":"2026-06-11T03:41:01.372Z"}}
+[debug] [2026-06-11T03:41:03.345Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:41:03.345Z] Checked if tokens are valid: true, expires at: 1781152678625
+[debug] [2026-06-11T03:41:03.345Z] >>> [apiv2][query] POST https://firebase.googleapis.com/v1beta1/projects/study-agent-isaac:addFirebase [none]
+[debug] [2026-06-11T03:41:04.071Z] <<< [apiv2][status] POST https://firebase.googleapis.com/v1beta1/projects/study-agent-isaac:addFirebase 403
+[debug] [2026-06-11T03:41:04.071Z] <<< [apiv2][body] POST https://firebase.googleapis.com/v1beta1/projects/study-agent-isaac:addFirebase {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2026-06-11T03:41:04.073Z] Request to https://firebase.googleapis.com/v1beta1/projects/study-agent-isaac:addFirebase had HTTP Error: 403, The caller does not have permission
+[debug] [2026-06-11T03:41:04.187Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/study-agent-isaac:addFirebase had HTTP Error: 403, The caller does not have permission
+    at responseToError (/usr/local/lib/node_modules/firebase-tools/lib/responseToError.js:53:12)
+    at RetryOperation._fn (/usr/local/lib/node_modules/firebase-tools/lib/apiv2.js:333:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[error] 
+[error] Error: Failed to add Firebase to Google Cloud Platform project. See firebase-debug.log for more info.

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { PaperPlaneRight, Robot, User } from '@phosphor-icons/react'
 import axios from 'axios'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export default function Chat() {
   const [messages, setMessages] = useState([
@@ -21,7 +22,7 @@ export default function Chat() {
     setInput('')
     setLoading(true)
     try {
-      const response = await axios.post('http://localhost:8000/chat', { message: userMessage })
+      const response = await axios.post(`${API_URL}/chat`, { message: userMessage })
       setMessages(prev => [...prev, { role: 'agent', text: response.data.response, sources: response.data.sources || [] }])
     } catch {
       setMessages(prev => [...prev, { role: 'agent', text: 'Error al conectar con el agente.' }])

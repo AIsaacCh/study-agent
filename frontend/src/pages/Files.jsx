@@ -13,6 +13,7 @@ import {
   MagnifyingGlass
 } from '@phosphor-icons/react'
 import axios from 'axios'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 
 
@@ -66,7 +67,7 @@ export default function Files() {
     setSelectedFile(file)
     setResult(null)
     try {
-      const r = await axios.post('http://localhost:8000/drive/summarize', {
+      const r = await axios.post(`${API_URL}/drive/summarize`, {
         file_id: file.id,
         mime_type: file.mimeType
       })
@@ -85,7 +86,7 @@ export default function Files() {
     setSelectedFile(file)
     setResult(null)
     try {
-      const r = await axios.post('http://localhost:8000/drive/flashcards', {
+      const r = await axios.post(`${API_URL}/drive/flashcards`, {
         file_id: file.id,
         mime_type: file.mimeType
       })
@@ -101,7 +102,7 @@ export default function Files() {
   const handleIndex = async (file) => {
   setProcessing(file.id)
   try {
-    const r = await axios.post('http://localhost:8000/elastic/index', {
+    const r = await axios.post(`${API_URL}/elastic/index`, {
       file_id: file.id,
       title: file.name,
       mime_type: file.mimeType
