@@ -7,11 +7,19 @@ import json
 import os 
 
 def get_credentials():
-    if not os.path.exists("token.json"):
-        return None
-    with open("token.json", "r") as f:
-        token_data=json.load(f)
-    creds=Credentials(
+    import os, json, base64
+    
+    token_b64 = os.getenv("GOOGLE_TOKEN_B64")
+    if token_b64:
+        token_data = json.loads(base64.b64decode(token_b64).decode("utf-8"))
+    elif os.path.exists("token.json"):
+        with open("token.json", "r") as f:
+            token_data = json.load(f)
+    else:
+        raise Exception("No Google credentials found")
+    
+    from google.oauth2.credentials import Credentials
+    creds = Credentials(
         token=token_data.get("token"),
         refresh_token=token_data.get("refresh_token"),
         token_uri=token_data.get("token_uri"),
@@ -19,7 +27,6 @@ def get_credentials():
         client_secret=token_data.get("client_secret"),
         scopes=token_data.get("scopes"),
     )
-
     return creds
 
 #-----drive-----
